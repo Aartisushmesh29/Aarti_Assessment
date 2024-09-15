@@ -103,7 +103,7 @@ const App: React.FC = () => {
         className="bg-white rounded-lg shadow-md"
         selectionMode={rowClick ? null : 'checkbox'}
         selection={selectedArtworks}
-        onSelectionChange={(e) => setSelectedArtworks(e.value)}
+        onSelectionChange={(e: { value: Artwork[] }) => setSelectedArtworks(e.value)}  // Define the type for e
       >
 
       {/*  Render the columns */}
