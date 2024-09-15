@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'; 
 import { DataTable } from 'primereact/datatable'; // Import DataTable
 import { Column } from 'primereact/column'; // Import Column
-import { Paginator } from 'primereact/paginator'; // Import Paginator
 import { OverlayPanel } from 'primereact/overlaypanel'; // Import OverlayPanel
 import { Button } from 'primereact/button'; // Import Button
-import { InputNumber } from 'primereact/inputnumber'; // Import InputNumber
-import "./App.css"
+import { InputNumber } from 'primereact/inputnumber'; //  Import InputNumber
+
 
 // Define the Artwork interface
 interface Artwork {
@@ -18,16 +17,18 @@ interface Artwork {
 }
 
 // Define the App component
+
 const App: React.FC = () => {
   const [artworks, setArtworks] = useState<Artwork[]>([]); // Initialize artworks state
   const [loading, setLoading] = useState<boolean>(true); // Initialize loading state
   const [totalRecords, setTotalRecords] = useState<number>(0); // Initialize totalRecords state
   const [page, setPage] = useState<number>(1); // Initialize page state
-  const [rowClick, setRowClick] = useState<boolean>(false); // Initialize rowClick state
+  const rowClick = ""; // Initialize rowClick state
   const [selectedArtworks, setSelectedArtworks] = useState<Artwork[]>([]); // Initialize selectedArtworks state
-  const [rowsPerPage, setRowsPerPage] = useState<number>(12); // Initialize rowsPerPage state
+  const rowsPerPage = 12 // Initialize rowsPerPage state
   const [rowsToSelect, setRowsToSelect] = useState<number | null>(null); // Initialize rowsToSelect state
-  const overlayPanelRef = useRef<OverlayPanel>(null); // Initialize overlayPanelRef ref
+  const overlayPanelRef = useRef<OverlayPanel>(null); //  Initialize overlayPanelRef ref
+
 
   // Fetch artworks from the API
   useEffect(() => {
@@ -48,7 +49,8 @@ const App: React.FC = () => {
     fetchArtworks(); // Call fetchArtworks function
   }, [page, rowsPerPage]); // Call fetchArtworks function when page or rowsPerPage change
 
-  // Handle page change
+
+   // Handle page change
   const onPageChange = (e: any) => {
     setPage(e.page + 1);
   };
@@ -62,7 +64,8 @@ const App: React.FC = () => {
     let currentPage = 1; // Initialize currentPage
     let remaining = totalToSelect; // Initialize remaining
 
-    setLoading(true); // Set loading state to true
+    setLoading(true); //  Set loading state to true
+
 
     // Fetch rows for selection
     try {
@@ -71,7 +74,7 @@ const App: React.FC = () => {
         const data = await response.json();
         const rows = data.data.slice(0, remaining); // Get the first remaining rows
         selected = [...selected, ...rows]; // Add rows to selected array
-        remaining -= rows.length; // Subtract the number of rows from remaining
+        remaining -= rows.length; //  Subtract the number of rows from remaining
         currentPage++; // Increment currentPage
       }
       setSelectedArtworks(selected); // Set selectedArtworks state
@@ -83,10 +86,10 @@ const App: React.FC = () => {
     }
   };
 
-  // Return the JSX for the App component
+   // Return the JSX for the App component
   return (
-    <div style={{ padding: '16px', backgroundColor: '#f0f0f0', borderRadius: '8px', maxWidth: '100%', margin: '0 auto' }}>
-      <h1 style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center', color: '#333', marginBottom: '16px' }}>Artworks</h1>
+    <div className="p-4 bg-gray-100 rounded-lg shadow-md max-w-full mx-auto overflow-hidden">
+      <h1 className="text-2xl font-bold text-center text-gray-900 mb-4">Artworks</h1>
 
       <DataTable
         value={artworks}
@@ -97,31 +100,38 @@ const App: React.FC = () => {
         totalRecords={totalRecords}
         loading={loading}
         onPage={(e) => onPageChange(e)}
-        style={{ backgroundColor: '#fff', borderRadius: '8px' }}
+        className="bg-white rounded-lg shadow-md"
         selectionMode={rowClick ? null : 'checkbox'}
         selection={selectedArtworks}
         onSelectionChange={(e) => setSelectedArtworks(e.value)}
       >
-        {/* Render the columns */}
+
+      {/*  Render the columns */}
         {!rowClick && (
           <Column
             selectionMode="multiple"
             header={() => (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
+              <div className="flex flex-row items-center justify-end space-x-2">
                 <Button
                   icon="pi pi-angle-down"
                   onClick={(e) => overlayPanelRef.current?.toggle(e)}
                   className="p-button-outlined"
                 />
-                <OverlayPanel ref={overlayPanelRef} showCloseIcon style={{ width: '256px' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
+                <OverlayPanel ref={overlayPanelRef} showCloseIcon className="p-overlaypanel p-overlaypanel-w-64">
+                  <div className="flex flex-col items-center justify-center p-4">
+                    <div>
+
                     <InputNumber
                       value={rowsToSelect}
                       onValueChange={(e) => setRowsToSelect(e.value || null)}
                       placeholder="Enter number of rows"
-                      style={{ width: '100%', marginBottom: '8px' }}
-                    />
-                    <Button label="Submit" onClick={handleSubmit} style={{ marginTop: '8px' }} />
+                      className="w-full mb-2"
+                      />
+                      </div>
+                      <div>
+                    <Button label="Submit" onClick={handleSubmit} className="mt-2" />
+                      </div>
+                        
                   </div>
                 </OverlayPanel>
               </div>
